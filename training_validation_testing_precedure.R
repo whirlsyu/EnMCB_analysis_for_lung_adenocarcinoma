@@ -81,7 +81,7 @@ colnames(res_cv_3)<-c(colnames(total_res_select_filtered),
                       'COX_train','SVR_train','eNet_train','em_train',
                       'COX_validation','SVR_validation','eNet_validation','em_validation',
                       'COX_test','SVR_test','eNet_test','em_test')
-
+#calculation of the Rank Product value
 RP_data_cal<-res_cv_3[,9:24]
 RP_data_cal<-matrix(data=apply(RP_data_cal, 2, function(x){(length(x)-rank(x,ties.method='first')+1)}),nrow = nrow(RP_data_cal),ncol = ncol(RP_data_cal))
 RP_data_cal<-data.frame(RP_data_cal,RP=apply(RP_data_cal, 1, function(x)sum(log(x))))

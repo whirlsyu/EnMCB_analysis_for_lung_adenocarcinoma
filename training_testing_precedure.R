@@ -71,9 +71,11 @@ for (i in seq(nrow(mcb_new_res_select_filtered))) {
 colnames(new_res_cv)<-c(colnames(mcb_new_res_select_filtered),'COX_cv','SVR_cv','eNet_cv','em_cv',
                         'COX_test','SVR_test','eNet_test','em_test')
 
+#calculation of the Rank Product value
 RP_data_cal<-new_res_cv[,9:11]
 RP_data_cal<-matrix(data=apply(RP_data_cal, 2, function(x){(length(x)-rank(x,ties.method='first')+1)}),nrow = nrow(RP_data_cal),ncol = ncol(RP_data_cal))
 RP_data_cal<-data.frame(RP_data_cal,RP=apply(RP_data_cal, 1, function(x)sum(log(x))))
 rownames(RP_data_cal)<-new_res_cv[,'MCB_no']
 res_cv_RP<-data.frame(mcb_new_res_select_filtered[mcb_new_res_select_filtered[,'MCB_no'] %in% rownames(RP_data_cal),],new_res_cv[,9:16],RP=RP_data_cal$RP)
+#save the results
 write.csv(res_cv_RP,file = 'res_cv_RP.csv')

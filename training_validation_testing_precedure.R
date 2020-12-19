@@ -1,7 +1,7 @@
 #analyze data using training, validation, and testing procedure
 
 #include the private functions
-source('../functions.R')
+source('functions.R')
 
 get_the_datasets('training/validation/testing')
 #after downloading, the data will be loaded automatically, which contained the training, validation and testing sets.

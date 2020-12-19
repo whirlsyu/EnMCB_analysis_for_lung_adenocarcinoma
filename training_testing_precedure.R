@@ -13,9 +13,8 @@ get_the_datasets('training/testing')
 #Note that the data sets were pre-sampled from the database for reproducing the results. 
 #One may use sample() function in R if you want do the sampling.
 
-source('IdentifyMCB.R')
 
-mcb_new_res<-IdentifyMCB(data_combat_train)
+mcb_new_res<-EnMCB::IdentifyMCB(data_combat_train)
 # Statistics ( 31251  MCBs in total):
 # chr1 : total MCBs: 3059  Mean Length: 190.5567  (Range:  2 2230 )
 # chr10 : total MCBs: 1684  Mean Length: 168.633  (Range:  2 2075 )
@@ -41,8 +40,6 @@ mcb_new_res<-IdentifyMCB(data_combat_train)
 # chr9 : total MCBs: 363  Mean Length: 205.2645  (Range:  2 1566 )
 # chrX : total MCBs: 1031  Mean Length: 448.4656  (Range:  2 4282 )
 # chrY : total MCBs: 2  Mean Length: 158  (Range:  29 287 )
-
-
 
 
 #MCBs which have more than 5 CpG sites were retained.

@@ -41,41 +41,6 @@ auc_cal_cv<- function(single_one,train_set,y_surv_train,nfold=10,seed=NULL) {
            auc_COX_cv,auc_SVR_cv,auc_eNet_cv,auc_em_cv))
 }
 
-auc_cal_cv_tt <- function(single_one,all_data_train,data_test,y_surv_train,y_surv_test,nfold=10,seed=NULL) {
-  set.seed(seed)
-  sp<-sample(1:length(y_surv_train),replace = F)
-  order_sp<-order(sp)
-  y_surv_train = y_surv_train[sp]
-  all_data_train = all_data_train[,sp]
-  
-  train<-1:length(y_surv_train)
-  folds <- cut(seq(1,length(train)),breaks=nfold,labels=FALSE)
-  survival_predictions<-NULL
-  for (i in seq(unique(folds))) {
-    rz<- which(folds==i,arr.ind=TRUE)
-    em<-ensemble_model(t(single_one),all_data_train[,train[-rz]],y_surv_train[-rz])
-    survival_prediction<-ensemble_prediction(em,all_data_train[,train[rz]])
-    survival_predictions<-cbind(survival_predictions,survival_prediction)
-  }
-  
-  em_all<-ensemble_model(t(single_one),all_data_train,y_surv_train)
-  pre_test<-ensemble_prediction.m(em_all,data_test)
-
-  auc_COX_test<-auc_roc(y_surv = y_surv_test,pre_test['cox',])
-  auc_SVR_test<-auc_roc(y_surv = y_surv_test,pre_test['svm',])
-  auc_eNet_test<-auc_roc(y_surv = y_surv_test,pre_test['enet',])
-  auc_em_test<-auc_roc(y_surv = y_surv_test,pre_test['ensemble',])
-
-  auc_COX_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['cox',])
-  auc_SVR_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['svm',])
-  auc_eNet_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['enet',])
-  auc_em_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['ensemble',])
-  
-  return(c(single_one,
-           auc_COX_cv,auc_SVR_cv,auc_eNet_cv,auc_em_cv,
-           auc_COX_test,auc_SVR_test,auc_eNet_test,auc_em_test))
-}
-
 auc_cal_cv_tvt <- function(single_one,
                            train_set,validation_set,test_set,
                            y_surv_train,y_surv_validation,y_surv_test,
@@ -172,7 +137,7 @@ auc_roc <- function(y_surv,predictions) {
                            span =0.25*length(y_surv[,1])^(-0.20))$AUC
 }
 
-ROC_mutiple_clinical<-function(test_frame,y_surv,file_name="title",ntime=5){
+ROC_multiple_clinical<-function(test_frame,y_surv,file_name="title",ntime=5){
   requireNamespace("prognosticROC") #version 0.7
   sroclong_all<-NULL
   for (n in 1:ncol(test_frame)) {

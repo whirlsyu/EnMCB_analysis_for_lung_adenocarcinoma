@@ -1,7 +1,7 @@
 #analyze data using training, validation, and testing procedure
 
 #include the private functions
-source('functions.R')
+source('../functions.R')
 
 get_the_datasets('training/validation/testing')
 #after downloading, the data will be loaded automatically, which contained the training, validation and testing sets.
@@ -81,37 +81,6 @@ colnames(res_cv_3)<-c(colnames(total_res_select_filtered),
                       'COX_train','SVR_train','eNet_train','em_train',
                       'COX_validation','SVR_validation','eNet_validation','em_validation',
                       'COX_test','SVR_test','eNet_test','em_test')
-#############################################
-library(foreach)
-library(doParallel)
-cores=detectCores()
-cl <- makeCluster(cores[1]-2)
-registerDoParallel(cl)
-
-final_res_cv<- foreach(i = seq(nrow(total_res_select_filtered)), .combine=rbind ) %dopar% {
-  res_cv<-NULL
-  single_in_total_res_select_filtered<-total_res_select_filtered[i,]
-  #Several models can't be built due to the errors in survivalsvm package, this can be improved further.
-  try(res_cv<-auc_cal_cv(single_in_total_res_select_filtered,
-                                              data_combat_train,
-                                              y_surv_train,seed = 9))
-  res_cv
-}
-stopCluster(cl)
-
-res_cv<-NULL
-for (i in seq(nrow(total_res_select_filtered))) {
-  single_in_total_res_select_filtered<-total_res_select_filtered[i,]
-  #Several models can't be built due to the errors in survivalsvm package, this can be improved further.
-  try(
-    res_cv = rbind(res_cv,auc_cal_cv(single_in_total_res_select_filtered,
-                         data_combat_train,
-                         y_surv_train))
-  )
-  cat('.')
-}
-
-
 
 RP_data_cal<-res_cv_3[,9:24]
 RP_data_cal<-matrix(data=apply(RP_data_cal, 2, function(x){(length(x)-rank(x,ties.method='first')+1)}),nrow = nrow(RP_data_cal),ncol = ncol(RP_data_cal))
@@ -133,8 +102,8 @@ em<-ensemble_model(single_res = single_res,training_set = data_combat_train,Surv
 #use the model to predict the response in training set
 ep<-ensemble_prediction.m(ensemble_model = em,predition_data = data_combat_train)
 
-#calculation of AUC
-ROC_mutiple_clinical(test_frame = data.frame(cox=ep['cox',],
+#calculation of AUC and plot and save the results in pdf files
+ROC_multiple_clinical(test_frame = data.frame(cox=ep['cox',],
                                              svm=ep['svm',],
                                              eNet=ep['enet',],
                                              ensemble=ep['ensemble',]
@@ -145,8 +114,8 @@ y = y_surv_train,file_name = "mutiple model training"
 #use the model to predict the response in validation set
 ep_v<-ensemble_prediction.m(ensemble_model = em,predition_data = data_combat_validation)
 
-#calculation of AUC
-ROC_mutiple_clinical(test_frame = data.frame(cox=ep_v['cox',],
+#calculation of AUC and plot and save the results in pdf files
+ROC_multiple_clinical(test_frame = data.frame(cox=ep_v['cox',],
                                              svm=ep_v['svm',],
                                              eNet=ep_v['enet',],
                                              ensemble=ep_v['ensemble',]
@@ -157,8 +126,8 @@ y = y_surv_validation,file_name = "mutiple model validation"
 #use the model to predict the response in testing set
 ep_t<-ensemble_prediction.m(ensemble_model = em,predition_data = data_combat_test)
 
-#calculation of AUC
-ROC_mutiple_clinical(test_frame = data.frame(cox=ep_t['cox',],
+#calculation of AUC and plot and save the results in pdf files
+ROC_multiple_clinical(test_frame = data.frame(cox=ep_t['cox',],
                                              svm=ep_t['svm',],
                                              eNet=ep_t['enet',],
                                              ensemble=ep_t['ensemble',]

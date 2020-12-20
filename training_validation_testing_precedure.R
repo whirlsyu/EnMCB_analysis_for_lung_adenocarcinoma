@@ -12,8 +12,7 @@ get_the_datasets('training/validation/testing')
 #y_surv_train : Surv object for the training set, DFS
 #y_surv_validation : Surv object for the validation set, DFS
 #y_surv_test : Surv object for the testing set, DFS
-#Note that the data sets were pre-sampled from the database for reproducing the results. 
-#One may use sample() function in R if you want do the sampling.
+#One may use sample() function in R if you want do the further sampling.
 
 total_res<-EnMCB::IdentifyMCB(data_combat_train)
 # Statistics ( 31728  MCBs in total):

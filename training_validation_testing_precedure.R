@@ -1,7 +1,7 @@
 #analyze data using training, validation, and testing procedure
 
 #include the private functions
-source('../functions.R')
+source('functions.R')
 
 get_the_datasets('training/validation/testing')
 #after downloading, the data will be loaded automatically, which contained the training, validation and testing sets.
@@ -81,13 +81,16 @@ colnames(res_cv_3)<-c(colnames(total_res_select_filtered),
                       'COX_train','SVR_train','eNet_train','em_train',
                       'COX_validation','SVR_validation','eNet_validation','em_validation',
                       'COX_test','SVR_test','eNet_test','em_test')
+
+
 #calculation of the Rank Product value
+
 RP_data_cal<-res_cv_3[,9:24]
 RP_data_cal<-matrix(data=apply(RP_data_cal, 2, function(x){(length(x)-rank(x,ties.method='first')+1)}),nrow = nrow(RP_data_cal),ncol = ncol(RP_data_cal))
 RP_data_cal<-data.frame(RP_data_cal,RP=apply(RP_data_cal, 1, function(x)sum(log(x))))
 rownames(RP_data_cal)<-res_cv_3[,'MCB_no']
 res_cv_3_RP<-data.frame(res_cv_3,RP=RP_data_cal$RP)
-
+write.csv(res_cv_3_RP,file = 'res_cv_3_RP.csv')
 
 # select the best mcb here due to the annoation file
 # 29016 or 29147 are the same MCB with the CpG sites of "cg01957585 cg11323985 cg26118821 cg12082271 cg22276811"
@@ -100,7 +103,7 @@ single_res<-t(as.matrix(total_res_select_filtered[total_res_select_filtered[,'MC
 em<-ensemble_model(single_res = single_res,training_set = data_combat_train,Surv_training = y_surv_train)
 
 #use the model to predict the response in training set
-ep<-ensemble_prediction.m(ensemble_model = em,predition_data = data_combat_train)
+ep<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_train,mutiple_results = T)
 
 #calculation of AUC and plot and save the results in pdf files
 ROC_multiple_clinical(test_frame = data.frame(cox=ep['cox',],
@@ -124,7 +127,7 @@ y = y_surv_validation,file_name = "mutiple model validation"
 )
 
 #use the model to predict the response in testing set
-ep_t<-ensemble_prediction.m(ensemble_model = em,predition_data = data_combat_test)
+ep_t<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_test, mutiple_results = T)
 
 #calculation of AUC and plot and save the results in pdf files
 ROC_multiple_clinical(test_frame = data.frame(cox=ep_t['cox',],
@@ -136,13 +139,13 @@ y = y_surv_test,file_name = "mutiple model test"
 )
 
 #draw survival curve for training set
-draw_survival_curve(ep['ensemble',],
+EnMCB::draw_survival_curve(ep['ensemble',],
                     living_days = y_surv_train[,1],
                     living_events = y_surv_train[,2],
-                    file_name = "ensemble model training")
+                    write_name = "ensemble model training")
 
 #draw survival curve for testing set
-draw_survival_curve(ep_t['ensemble',],
+EnMCB::draw_survival_curve(ep_t['ensemble',],
                     living_days = y_surv_test[,1],
                     living_events = y_surv_test[,2],
-                    file_name = "ensemble model testing",threshold = median(ep['ensemble',]))
+                    write_name = "ensemble model testing",threshold = median(ep['ensemble',]))

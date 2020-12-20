@@ -15,4 +15,5 @@ if you want get the results for training/validation/testing method, please use t
 
 if you want get the results for training/testing method, please use training_testing_precedure.R
 
-The scripts including the dataset download precedure as long as the analysis code, which may time consuming (10-15 hours), please consider that.
+The scripts including the dataset download precedure as long as the analysis code, which may time consuming (may 10-15+ hours), please consider that.
+

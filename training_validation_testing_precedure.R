@@ -92,7 +92,7 @@ res_cv_3_RP<-data.frame(res_cv_3,RP=RP_data_cal$RP)
 write.csv(res_cv_3_RP,file = 'res_cv_3_RP.csv')
 
 # select the best mcb here due to the annoation file
-# 29016 or 29147 are the same MCB with the CpG sites of "cg01957585 cg11323985 cg26118821 cg12082271 cg22276811"
+# 29147 are the same MCB with the CpG sites of "cg01957585 cg11323985 cg26118821 cg12082271 cg22276811"
 # 
 MCBblocks_selected='29147'
 
@@ -101,10 +101,10 @@ single_res<-t(as.matrix(total_res_select_filtered[total_res_select_filtered[,'MC
 #build the model based on the five CpGs (cg01957585 cg11323985 cg26118821 cg12082271 cg22276811)
 em<-ensemble_model(single_res = single_res,training_set = data_combat_train,Surv_training = y_surv_train)
 
-#use the model to predict the response in training set
+#use the model to predict the responses in training set
 ep<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_train,mutiple_results = T)
 
-#calculation of AUC and plot and save the results in pdf files
+#calculation of AUC, plot and save the results in pdf files
 ROC_multiple_clinical(test_frame = data.frame(cox=ep['cox',],
                                              svm=ep['svm',],
                                              eNet=ep['enet',],
@@ -116,7 +116,7 @@ y = y_surv_train,file_name = "mutiple model training"
 #use the model to predict the response in validation set
 ep_v<-ensemble_prediction.m(ensemble_model = em,predition_data = data_combat_validation)
 
-#calculation of AUC and plot and save the results in pdf files
+#calculation of AUC, plot and save the results in pdf files
 ROC_multiple_clinical(test_frame = data.frame(cox=ep_v['cox',],
                                              svm=ep_v['svm',],
                                              eNet=ep_v['enet',],
@@ -128,7 +128,7 @@ y = y_surv_validation,file_name = "mutiple model validation"
 #use the model to predict the response in testing set
 ep_t<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_test, mutiple_results = T)
 
-#calculation of AUC and plot and save the results in pdf files
+#calculation of AUC, plot and save the results in pdf files
 ROC_multiple_clinical(test_frame = data.frame(cox=ep_t['cox',],
                                              svm=ep_t['svm',],
                                              eNet=ep_t['enet',],

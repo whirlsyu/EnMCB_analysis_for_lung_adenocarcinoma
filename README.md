@@ -1,11 +1,11 @@
 # EnMCB_analysis
 Analysis package and souce code
 
-To use this, please install our EnMCB source package (zip file)
+To use this, please first install our EnMCB source package (EnMCB_1.2.2.tar.gz)
 
 Make sure you use the right version, which is 1.2.2
 
-Note: This may not compatible with our bioconductor package since the package maybe further changed.
+Note: Those scripts may not compatible with our bioconductor package (other versions) since the package maybe further changed.
 
 This repository was designed for reproducing the results for paper (Predicting lung adenocarcinoma disease progression using methylation-correlated blocks and ensemble machine learning classifiers).
 

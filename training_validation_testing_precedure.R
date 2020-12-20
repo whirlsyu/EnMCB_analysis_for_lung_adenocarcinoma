@@ -16,7 +16,7 @@ get_the_datasets('training/validation/testing')
 
 total_res<-EnMCB::IdentifyMCB(data_combat_train)
 # Statistics ( 31728  MCBs in total):
-#   chr1 : total MCBs: 3080  Mean Length: 195.6571  (Range:  2 2348 )
+#  chr1 : total MCBs: 3080  Mean Length: 195.6571  (Range:  2 2348 )
 # chr10 : total MCBs: 1713  Mean Length: 179.2691  (Range:  2 2075 )
 # chr11 : total MCBs: 2000  Mean Length: 176.279  (Range:  2 2135 )
 # chr12 : total MCBs: 1479  Mean Length: 165.0892  (Range:  2 2056 )

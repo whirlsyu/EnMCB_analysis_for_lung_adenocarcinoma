@@ -7,7 +7,7 @@ Make sure you use the right version, which is 1.2.2
 
 Note: This may not compatible with our bioconductor package since the package maybe further changed.
 
-This used for reproducing the results for paper (Predicting lung adenocarcinoma disease progression using methylation-correlated blocks and ensemble machine learning classifiers).
+This repository was designed for reproducing the results for paper (Predicting lung adenocarcinoma disease progression using methylation-correlated blocks and ensemble machine learning classifiers).
 
 After install, you can download the R script and excute:
 

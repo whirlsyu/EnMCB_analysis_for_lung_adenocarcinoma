@@ -14,3 +14,5 @@ After install, you can download the R script and excute:
 if you want get the results for training/validation/testing method, please use training_validation_testing_precedure.R
 
 if you want get the results for training/testing method, please use training_testing_precedure.R
+
+The scripts including the dataset download precedure as long as the analysis code, which may time consuming (10-15 hours), please consider that.

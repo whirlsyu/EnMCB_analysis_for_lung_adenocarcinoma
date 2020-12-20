@@ -44,7 +44,7 @@ total_res<-EnMCB::IdentifyMCB(data_combat_train)
 
 
 #if you want do global comparison, you just use total_res$MCBinformation as total_res_select_filtered
-#and skip this selection section, however, skip the selection will make the calculation very time consuming (4-15 days).
+#and skip this selection section, however, skip this selection will make the calculation very time consuming (4-15 days).
 #selection procedure
 #MCBs which have more than 5 CpG sites were retained.
 

@@ -91,11 +91,12 @@ rownames(RP_data_cal)<-res_cv_3[,'MCB_no']
 res_cv_3_RP<-data.frame(res_cv_3,RP=RP_data_cal$RP)
 write.csv(res_cv_3_RP,file = 'res_cv_3_RP.csv')
 
-# select the best mcb here due to the annoation file
-# results may showed that the best one is MCB 29147,
-# this is identical to that of 29016 in our paper, 
+# select the best mcb
+# results may showed that the best one is MCB 29147
+# The MCB_no may different in the future due to the annoation file for 450K may updated in minfi package, however, general results should be the same.
+# MCB 29147 is identical to that of MCB 29016 in our paper,
 # 29147 and 29016 are the same MCB with the CpG sites of "cg01957585 cg11323985 cg26118821 cg12082271 cg22276811"
-# we used parallel computation, this give different MCB_no.
+# we used parallel computation using clusters in our lab, this give different MCB_no.
 MCBblocks_selected='29147'
 
 single_res<-t(as.matrix(total_res_select_filtered[total_res_select_filtered[,'MCB_no'] %in% MCBblocks_selected,]))

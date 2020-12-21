@@ -205,13 +205,15 @@ ROC_multiple_clinical<-function(test_frame,y_surv,file_name="title",ntime=5){
   require("ggplot2")
   require("plotROC")
   sroclong_all<-NULL
+  na_or_0 <- is.na(y_surv)|y_surv[,1]==0
+  y_surv = y_surv[!na_or_0]
+  test_frame = test_frame[!na_or_0,]
   for (n in 1:ncol(test_frame)) {
-    ROC_res= survivalROC::survivalROC(Stime=y_surv[,1],
+    ROC_res= survivalROC::survivalROC.C(Stime=y_surv[,1],
                                       status=y_surv[,2],
                                       marker =as.numeric(test_frame[,n]),
-                                      lambda = NULL,
-                                      predict.time = ntime,method = "NNE",span =0.25*length(y_surv)^(-0.20))#
-    sroclong_all<-ROCdata_save(sroclong_all,ROC_res,mark = paste(ntime,"year AUC at",colnames(test_frame)[n],round(ROC_res$AUC,2),collapse = " "))
+                                      predict.time = ntime,span =0.25*length(y_surv)^(-0.20))#
+    sroclong_all<-ROCdata_save(sroclong_all,ROC_res,mark = paste(ntime,"year AUC at",colnames(test_frame)[n],round(ROC_res$AUC,3),collapse = " "))
   }
   # The palette with grey:
   cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")

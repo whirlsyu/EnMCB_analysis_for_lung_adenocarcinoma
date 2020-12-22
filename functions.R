@@ -35,19 +35,27 @@ auc_cal_cv<- function(single_one,train_set,y_surv_train,nfold=10,seed=NULL) {
     train_set = train_set[,!na_or_zero_data]
     y_surv_train = y_surv_train[!na_or_zero_data]
     
-    cox<-metricMCB.cv(t(single_one),train_set,y_surv_train,Method = 'cox',silent = T,seed = seed)
-    svr<-metricMCB.cv(t(single_one),train_set,y_surv_train,Method = 'svm',silent = T,seed = seed)
-    enet<-metricMCB.cv(t(single_one),train_set,y_surv_train,Method = 'enet',silent = T,seed = seed)
-    em<-metricMCB.cv(t(single_one),train_set,y_surv_train,Method = 'ensemble',silent = T,seed = seed)
+    cox<-metricMCB.cv(single_one,train_set,y_surv_train,Method = 'cox',silent = T,seed = seed)
+    svr<-metricMCB.cv(single_one,train_set,y_surv_train,Method = 'svm',silent = T,seed = seed)
+    enet<-metricMCB.cv(single_one,train_set,y_surv_train,Method = 'enet',silent = T,seed = seed)
+    em<-metricMCB.cv(single_one,train_set,y_surv_train,Method = 'ensemble',silent = T,seed = seed)
     
-    auc_COX_cv<-auc_roc(y_surv = y_surv_train,cox$MCB_matrix)
-    auc_SVR_cv<-auc_roc(y_surv = y_surv_train,svr$MCB_matrix)
-    auc_eNet_cv<-auc_roc(y_surv = y_surv_train,enet$MCB_matrix)
-    auc_em_cv<-auc_roc(y_surv = y_surv_train,em$MCB_matrix)
+    cindex_COX_cv<-unlist(cox$auc_results[1,'C-index'])
+    cindex_SVR_cv<-unlist(svr$auc_results[1,'C-index'])
+    cindex_eNet_cv<-unlist(enet$auc_results[1,'C-index'])
+    cindex_em_cv<-unlist(em$auc_results[1,'C-index'])
+    
+    auc_COX_cv<-unlist(cox$auc_results[1,'auc'])
+    auc_SVR_cv<-unlist(svr$auc_results[1,'auc'])
+    auc_eNet_cv<-unlist(enet$auc_results[1,'auc'])
+    auc_em_cv<-unlist(em$auc_results[1,'auc'])
+    
   
-  return(c(single_one,
+  return(cbind(single_one,
+           cindex_COX_cv,cindex_SVR_cv,cindex_eNet_cv,cindex_em_cv,
            auc_COX_cv,auc_SVR_cv,auc_eNet_cv,auc_em_cv))
 }
+
 
 auc_cal_cv_tvt <- function(single_one,
                            train_set,validation_set,test_set,

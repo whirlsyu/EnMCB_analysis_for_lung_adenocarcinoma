@@ -7,14 +7,24 @@ get_the_datasets('training/validation/testing')
 #after downloading, the data will be loaded automatically, which contained the training, validation and testing sets.
 #Those data were obtained from the TCGA and GEO data sets.
 #data_combat_train : training set, obtained from the TCGA (LUAD) databases.
-#data_combat_test : validation set  51 samples from the GEO (GSE39279) databases.
+#data_combat_validation : validation set  51 samples from the GEO (GSE39279) databases.
 #data_combat_test : testing set 104 samples from the GEO (GSE39279) databases.
 #y_surv_train : Surv object for the training set, DFS
 #y_surv_validation : Surv object for the validation set, DFS
 #y_surv_test : Surv object for the testing set, DFS
-#One may use sample() function in R if you want do the further sampling.
+
+#If you want do the further resampling, you need to combine 
+#the survival data as well as the methylation matrix by following (for example):
+#y_surv_for_resampling <- c(y_surv_validation,y_surv_test)
+#methylation_data_for_resampling <- cbind(data_combat_validation, data_combat_test)
+#And then sample them by following:
+#resampling <- sample(colnames(methylation_data_for_resampling),floor(ncol(methylation_data_for_resampling)*0.33))
+#y_surv_resampled_validation_set <- y_surv_for_resampling[resampling]
+#methylation_data_resampled_validation_set <- methylation_data_for_resampling[,resampling]
+
 
 total_res<-EnMCB::IdentifyMCB(data_combat_train)
+# It should be printed like this:
 # Statistics ( 31728  MCBs in total):
 #  chr1 : total MCBs: 3080  Mean Length: 195.6571  (Range:  2 2348 )
 # chr10 : total MCBs: 1713  Mean Length: 179.2691  (Range:  2 2075 )

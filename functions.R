@@ -5,12 +5,12 @@ require('survivalROC')
 require('prognosticROC')
 
 get_the_datasets<-function(type){
-  if (!file.exists('annotation_met.txt')) download.file('ftp://server.genelibs.com/en_mcb/annotation_met.txt',destfile = 'annotation_met.txt')      #download the annotation data
+  if (!file.exists('annotation_met.txt')) download.file('ftp://sougene.com/pub/annotation_met.txt',destfile = 'annotation_met.txt')      #download the annotation data
   if (type == 'training/testing'){
     if (!file.exists('training_testing_data.RData')){
       #Considering the data size up to 1.7Gb, the data downloading could be a time consuming process.
       #download the data sets
-      download.file('ftp://server.genelibs.com/en_mcb/training_testing_precedure/training_testing_data.RData',
+      download.file('ftp://sougene.com/pub/training_testing_data.RData',
                     destfile = 'training_testing_data.RData' )
     }
     load('training_testing_data.RData',envir = globalenv())

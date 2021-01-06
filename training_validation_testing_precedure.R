@@ -22,7 +22,7 @@ downloadTCGA(cancerTypes = 'LUAD', 'LUAD.Merge_Clinical.Level_1', destDir ='your
 #We also recommend you read this reference:
 #Liu J, Lichtenberg T, et al. An Integrated TCGA Pan-Cancer Clinical Data Resource to Drive High-Quality Survival Outcome Analytics. Cell 173:400-416 e411. 10.1016/j.cell.2018.02.052
 
-#You can get the subsets from the original datasets by barcode and GSM code saved in the file of tvt_names.txt.
+#You can get the subsets (training, validation, and testing sets) from the original datasets by barcode and GSM code saved in the file of tvt_names.txt.
 
 #Also you may want get the data automaticly using the following built in function:
 get_the_datasets('training/validation/testing')

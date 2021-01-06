@@ -3,6 +3,18 @@
 #include the private functions
 source('functions.R')
 
+#For GSE39279 in GEO database, one can download the data using GEOquery package in bioconductor:
+library(GEOquery)
+GSE39279 <- getGEO('GSE39279',GSEMatrix=TRUE)[[1]]
+#the function will return a expressionset in R
+
+#For the lung adenocarcinoma data in TCGA database,
+#One can get the lung adenocarcinoma methylation 450k data using RTCGA package
+
+
+#Alternatively, you can use our ftp mirror server for RTCGA files at:
+#ftp://server.genelibs.com/raw_data_tcga/
+
 get_the_datasets('training/validation/testing')
 #after downloading, the data will be loaded automatically, which contained the training, validation and testing sets.
 #Those data were obtained from the TCGA and GEO data sets.

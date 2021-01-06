@@ -16,6 +16,7 @@ library(RTCGA)
 downloadTCGA(cancerTypes = 'LUAD', 'LUAD-FFPE.Merge_methylation__humanmethylation450__jhu_usc_edu__Level_3', destDir ='your_dir', date = "2016-01-28")
 #Alternatively, you can also use our ftp mirror server for RTCGA files at:
 #ftp://server.genelibs.com/raw_data_tcga/
+#This ftp server may fail to load with an IP outside mainland China due to some regulation of our network operators, you may need a proxy.
 
 #For clinical data in TCGA, you can download it using:
 downloadTCGA(cancerTypes = 'LUAD', 'LUAD.Merge_Clinical.Level_1', destDir ='your_dir', date = "2016-01-28")

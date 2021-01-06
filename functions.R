@@ -18,7 +18,7 @@ get_the_datasets<-function(type){
     if (!file.exists('training_validation_testing_data.RData')){
       #Considering the data size up to 1.7Gb, the data downloading could be a time consuming process.
       #download the data sets
-      download.file('ftp://server.genelibs.com/en_mcb/training_testing_precedure/training_validation_testing_data.RData',
+      download.file('ftp://sougene.com/pub/training_validation_testing_data.RData',
                     destfile = 'training_validation_testing_data.RData' )
     }
     load('training_validation_testing_data.RData',envir = globalenv())

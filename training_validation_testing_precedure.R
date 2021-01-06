@@ -7,14 +7,22 @@ source('functions.R')
 library(GEOquery)
 GSE39279 <- getGEO('GSE39279',GSEMatrix=TRUE)[[1]]
 #the function will return a expressionset in R
+#You can get the clinical data using:
+pData(GSE39279)
 
 #For the lung adenocarcinoma data in TCGA database,
 #One can get the lung adenocarcinoma methylation 450k data using RTCGA package
-
-
-#Alternatively, you can use our ftp mirror server for RTCGA files at:
+library(RTCGA)
+downloadTCGA(cancerTypes = 'LUAD', 'LUAD-FFPE.Merge_methylation__humanmethylation450__jhu_usc_edu__Level_3', destDir ='your_dir', date = "2016-01-28")
+#Alternatively, you can also use our ftp mirror server for RTCGA files at:
 #ftp://server.genelibs.com/raw_data_tcga/
 
+#For clinical data in TCGA, you can download it using:
+downloadTCGA(cancerTypes = 'LUAD', 'LUAD.Merge_Clinical.Level_1', destDir ='your_dir', date = "2016-01-28")
+#We also recommend you read this reference:
+#Liu J, Lichtenberg T, et al. An Integrated TCGA Pan-Cancer Clinical Data Resource to Drive High-Quality Survival Outcome Analytics. Cell 173:400-416 e411. 10.1016/j.cell.2018.02.052
+
+#Also you may want get the data automaticly using the following built in function:
 get_the_datasets('training/validation/testing')
 #after downloading, the data will be loaded automatically, which contained the training, validation and testing sets.
 #Those data were obtained from the TCGA and GEO data sets.

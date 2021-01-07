@@ -138,7 +138,7 @@ single_res<-t(as.matrix(total_res_select_filtered[total_res_select_filtered[,'MC
 em<-ensemble_model(single_res = single_res,training_set = data_combat_train,Surv_training = y_surv_train)
 
 #use the model to predict the responses in training set
-ep<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_train,mutiple_results = T)
+ep<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_train,multiple_results = T)
 
 #calculation of AUC, plot and save the results in pdf files
 ROC_multiple_clinical(test_frame = data.frame(cox=ep['cox',],
@@ -146,7 +146,7 @@ ROC_multiple_clinical(test_frame = data.frame(cox=ep['cox',],
                                              eNet=ep['enet',],
                                              ensemble=ep['ensemble',]
 ),
-y = y_surv_train,file_name = "mutiple model training"
+y = y_surv_train,file_name = "multiple model training"
 )
 
 #use the model to predict the response in validation set
@@ -158,11 +158,11 @@ ROC_multiple_clinical(test_frame = data.frame(cox=ep_v['cox',],
                                              eNet=ep_v['enet',],
                                              ensemble=ep_v['ensemble',]
 ),
-y = y_surv_validation,file_name = "mutiple model validation"
+y = y_surv_validation,file_name = "multiple model validation"
 )
 
 #use the model to predict the response in testing set
-ep_t<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_test, mutiple_results = T)
+ep_t<-ensemble_prediction(ensemble_model = em,predition_data = data_combat_test, multiple_results = T)
 
 #calculation of AUC, plot and save the results in pdf files
 ROC_multiple_clinical(test_frame = data.frame(cox=ep_t['cox',],
@@ -170,7 +170,7 @@ ROC_multiple_clinical(test_frame = data.frame(cox=ep_t['cox',],
                                              eNet=ep_t['enet',],
                                              ensemble=ep_t['ensemble',]
 ),
-y = y_surv_test,file_name = "mutiple model test"
+y = y_surv_test,file_name = "multiple model test"
 )
 
 #draw survival curve for training set

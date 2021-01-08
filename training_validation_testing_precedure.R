@@ -117,7 +117,7 @@ colnames(res_cv_3)<-c(colnames(total_res_select_filtered),
 
 #calculation of the Rank Product value
 
-RP_data_cal<-res_cv_3[,9:24]
+RP_data_cal<-res_cv_3[,9:16]
 RP_data_cal<-matrix(data=apply(RP_data_cal, 2, function(x){(length(x)-rank(x,ties.method='first')+1)}),nrow = nrow(RP_data_cal),ncol = ncol(RP_data_cal))
 RP_data_cal<-data.frame(RP_data_cal,RP=apply(RP_data_cal, 1, function(x)sum(log(x))))
 rownames(RP_data_cal)<-res_cv_3[,'MCB_no']

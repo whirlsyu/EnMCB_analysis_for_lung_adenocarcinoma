@@ -123,18 +123,18 @@ auc_cal_cv_tvt <- function(single_one,
   test_and_validation_em<- EnMCB::ensemble_prediction(em,vt_data)
   
   auc_COX_train<-auc_roc(y_surv = y_surv_train,cox$MCB_cox_matrix_training)
-  auc_SVR_train<-auc_roc(y_surv = y_surv_train,svr$MCB_svm_matrix_training)
+  auc_SVR_train<-auc_roc(y_surv = y_surv_train,svr$MCB_svm_matrix_training,y_surv_train,prid_em['svm',])
   auc_eNet_train<-auc_roc(y_surv = y_surv_train,enet$MCB_enet_matrix_training)
   auc_em_train<-auc_roc(y_surv = y_surv_train,prid_em)
   
   
   auc_COX_validation<-auc_roc(y_surv = y_surv_validation,cox$MCB_cox_matrix_test_set[vt_flag == 'validation'])
-  auc_SVR_validation<-auc_roc(y_surv = y_surv_validation,svr$MCB_svm_matrix_test_set[vt_flag == 'validation'])
+  auc_SVR_validation<-auc_roc(y_surv = y_surv_validation,svr$MCB_svm_matrix_test_set[vt_flag == 'validation'],y_surv_train,prid_em['svm',])
   auc_eNet_validation<-auc_roc(y_surv = y_surv_validation,enet$MCB_enet_matrix_test_set[vt_flag == 'validation'])
   auc_em_validation<-auc_roc(y_surv = y_surv_validation,test_and_validation_em[vt_flag == 'validation'])
 
   auc_COX_test<-auc_roc(y_surv = y_surv_test,cox$MCB_cox_matrix_test_set[vt_flag == 'test'])
-  auc_SVR_test<-auc_roc(y_surv = y_surv_test,svr$MCB_svm_matrix_test_set[vt_flag == 'test'])
+  auc_SVR_test<-auc_roc(y_surv = y_surv_test,svr$MCB_svm_matrix_test_set[vt_flag == 'test'],y_surv_train,prid_em['svm',])
   auc_eNet_test<-auc_roc(y_surv = y_surv_test,enet$MCB_enet_matrix_test_set[vt_flag == 'test'])
   auc_em_test<-auc_roc(y_surv = y_surv_test,test_and_validation_em[vt_flag == 'test'])
   
@@ -168,20 +168,20 @@ auc_cal_cv_tt <- function(single_one,all_data_train,data_test,y_surv_train,y_sur
   for (i in seq(unique(folds))) {
     rz<- which(folds==i,arr.ind=TRUE)
     em<-ensemble_model(t(single_one),all_data_train[,train[-rz]],y_surv_train[-rz])
-    survival_prediction<-ensemble_prediction(em,all_data_train[,train[rz]],mutiple_results = T)
+    survival_prediction<-ensemble_prediction(em,all_data_train[,train[rz]],multiple_results = T)
     survival_predictions<-cbind(survival_predictions,survival_prediction)
   }
   
   em_all<-ensemble_model(t(single_one),all_data_train,y_surv_train)
-  pre_test<-ensemble_prediction(em_all,data_test,mutiple_results = T)
+  pre_test<-ensemble_prediction(em_all,data_test,multiple_results = T)
   
   auc_COX_test<-auc_roc(y_surv = y_surv_test,pre_test['cox',])
-  auc_SVR_test<-auc_roc(y_surv = y_surv_test,pre_test['svm',])
+  auc_SVR_test<-auc_roc(y_surv = y_surv_test,pre_test['svm',],y_surv_train,survival_predictions['svm',])
   auc_eNet_test<-auc_roc(y_surv = y_surv_test,pre_test['enet',])
   auc_em_test<-auc_roc(y_surv = y_surv_test,pre_test['ensemble',])
   
   auc_COX_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['cox',])
-  auc_SVR_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['svm',])
+  auc_SVR_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['svm',],y_surv_train,survival_predictions['svm',])
   auc_eNet_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['enet',])
   auc_em_cv<-auc_roc(y_surv = y_surv_train,survival_predictions['ensemble',])
   
@@ -190,12 +190,22 @@ auc_cal_cv_tt <- function(single_one,all_data_train,data_test,y_surv_train,y_sur
            auc_COX_test,auc_SVR_test,auc_eNet_test,auc_em_test))
 }
 
-auc_roc <- function(y_surv,predictions) {
-  survivalROC::survivalROC.C(Stime = y_surv[,1],
-                           status = y_surv[,2],
-                           marker = predictions,
-                           predict.time = 5,
-                           span =0.25*length(y_surv[,1])^(-0.20))$AUC
+auc_roc <- function(y_surv,predictions,y_surv_train=NULL,training=NULL) {
+  #get the risk
+  if (is.null(y_surv_train)){
+    return(survivalROC::survivalROC.C(Stime = y_surv[,1],
+                                      status = y_surv[,2],
+                                      marker = predictions,
+                                      predict.time = 5,
+                                      span =0.25*length(y_surv)^(-0.20))$AUC)
+  }else{
+    mod.ph<-survival::coxph(y_surv_train ~ var,data.frame(var = training))
+    return(survivalROC::survivalROC.C(Stime = y_surv[,1],
+                               status = y_surv[,2],
+                               marker = predict(mod.ph, data.frame(var = predictions), type = 'risk'),
+                               predict.time = 5,
+                               span =0.25*length(y_surv)^(-0.20))$AUC)
+  }
 }
 
 #'@title ROC calculation for multiple clinical data

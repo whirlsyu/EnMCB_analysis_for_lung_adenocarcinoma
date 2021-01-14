@@ -24,7 +24,7 @@ downloadTCGA(cancerTypes = 'LUAD', 'LUAD.Merge_Clinical.Level_1', destDir ='your
 
 #You can get the subsets (training and testing sets) from the original datasets by barcode and GSM code saved in the file of tt_names.txt. 
 
-#Also you may want get the data automaticly using the following built in function:
+#Also you may want to get the data automatically using the following built in function:
 get_the_datasets('training/testing')
 #after downloading, the data will be loaded automatically, which contained the training and testing sets.
 #Those data were obtained from the TCGA and GEO data sets.
